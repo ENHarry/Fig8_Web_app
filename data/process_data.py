@@ -22,9 +22,8 @@ def clean_data(df):
     # select the first row of the categories dataframe
     row = categories.loc[0,:]
 
-    # use this row to extract a list of new column names for categories.
-    # one way is to apply a lambda function that takes everything 
-    # up to the second to last character of each string with slicing
+    
+    # extract category names
     category_colnames = row.apply(lambda x: x[:-2])
 
     # rename the columns of `categories`

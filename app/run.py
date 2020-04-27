@@ -48,7 +48,7 @@ def index():
     med_names = list(med_help_cnts.index)
 
     # additional plot 1
-    water_cnts = df[(df['water']!=0) & (df['request']!='0')].groupby(['genre']).water.count()
+    water_cnts = df[(df['water']!=0) & (df['request']!= 0)].groupby(['genre']).water.count()
     water_names = list(water_cnts.index)
 
     # create visuals
