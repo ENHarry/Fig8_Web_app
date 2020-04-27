@@ -6,6 +6,15 @@ import numpy as np
 from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
+    '''
+    insert path to database for saved data extraction
+    Args:
+        messages_filepath  : (relative) filepath of disaster_messages.csv
+        categories_filepath : (relative) filepath of disaster_categories.csv
+        
+    Returns:
+        A merged data frame
+    '''
     # loading data
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
@@ -16,6 +25,14 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    '''
+    insert path to database for saved data extraction
+    Args:
+        df  : merged data frame that needs to be cleaned further
+        
+    Returns:
+        cleaned df
+    '''
     # create a dataframe of the 36 individual category columns
     categories = df['categories'].str.split(';', expand=True)
     
@@ -53,7 +70,16 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
-    engine = create_engine('sqlite:///'+database_filename)
+    '''
+    insert path to database for saved data extraction
+    Args:
+        df : previously cleaned data
+        database_filename  : (relative) name for database
+        
+    Returns:
+        X, Y, category_names
+    '''
+    engine = create_engine('sqlite:///'+ database_filename)
     df.to_sql('cleanedDF', engine, index=False, if_exists='replace')
       
 

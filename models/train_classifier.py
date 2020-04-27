@@ -22,6 +22,16 @@ from sklearn.metrics import classification_report
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 def load_data(database_filepath):
+    '''
+    insert path to database for saved data extraction
+    Args:
+        database_filepath  : (relative) filepath of cleanedDF
+        
+    Returns:
+        X, Y, category_names
+    '''
+
+
     engine = create_engine('sqlite:///'+database_filepath)
     df = pd.read_sql_table('cleanedDF',engine)
     X = df['message'].astype(str)
@@ -59,13 +69,32 @@ contractions = {"aren\'t": "are not","can\'t": "cannot","can\'t\'ve": "cannot ha
                }
 contractions_re = re.compile('(%s)' % '|'.join(contractions.keys()))
 def expand_contractions(s, cdict=contractions):
+    '''
+    takes in strng contractions and expands them 
+    using the match function from re
+    Args:
+        s : (relative) string
+        cdict : default contraction dictionary
+        
+    Returns:
+        expanded string
+    '''
     def replace(match):
         return cdict[match.group(0)]
+
     return contractions_re.sub(replace, s.lower())
 
 
 
 def tokenize(text):
+    '''
+    
+    Args:
+        text : takes each row 
+        
+    Returns:
+        cleaned tokens
+    '''
     # clear any contractions
     text= expand_contractions(text, cdict=contractions)
     
@@ -85,8 +114,15 @@ def tokenize(text):
 
 
 def build_model():
-
-    # create machine learling pipeline
+    '''
+    
+    Args:
+        None
+        
+    Returns:
+        Machine Learning Pipeline
+    '''
+    # create machine learning pipeline
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -97,6 +133,16 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    '''
+    insert path to database for saved data extraction
+    Args:
+        model  : resulting model from built function
+        X_test : testing text
+        Y_test : testing categories
+        
+    Returns:
+        None, instead prints results.
+    '''
     # predict on test data
     y_pred = model.predict(X_test)
 
@@ -114,6 +160,13 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    '''
+    Args:
+        model_filepath  : (relative) filepath of model
+        
+    Returns:
+        None, instead save the trained model
+    '''
     # saving model to pickle file
     pickle_path = model_filepath
 
